@@ -1,137 +1,154 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// Defining the Node structure
 struct Node
 {
     int data;
     struct Node *next;
-};
+} Node;
 
-// Creating a new node
 struct Node *createNode(int data)
 {
-    struct Node *newNode = (struct Node *)malloc(sizeof(struct Node));
-    newNode->data = data;
-    newNode->next = NULL;
-    return newNode;
+    struct Node *temp = (struct Node *)malloc(sizeof(Node));
+    temp->data = data;
+    temp->next = NULL;
+
+    return temp;
 }
 
-// Function to insert a new node at the beginning
-void Insert(struct Node **head, int data)
+// insert at the begining of the list
+struct Node *insertAtBeginning(struct Node *head, int data)
 {
+
+    // create a node with the given value
     struct Node *newNode = createNode(data);
-    newNode->next = *head;
-    *head = newNode;
+
+    // set the next pointer of the new node to the current head
+    newNode->next = head;
+
+    // set the head to point to the new node
+    head = newNode;
+
+    return head;
 }
 
-// Function to delete a node from the end
-void deleteFromEnd(struct Node **head)
+// insert at the end of the list
+struct Node *insertAtEnd(struct Node *head, int data)
 {
-    if (*head == NULL)
+    // create a new node with the given value
+    struct Node *newNode = createNode(data);
+
+    if (head == NULL)
     {
-        printf("List is empty\n");
-        return;
+        return newNode;
     }
-    struct Node *temp = *head;
-    if (temp->next == NULL)
-    {
-        printf("Deleted element is: %d\n", temp->data);
-        free(temp);
-        *head = NULL;
-        return;
-    }
-    while (temp->next->next != NULL)
+
+    // traverse to the end of the list
+    struct Node *temp = head;
+
+    while (temp->next != NULL)
     {
         temp = temp->next;
     }
-    printf("Deleted element is: %d\n", temp->next->data);
-    free(temp->next);
-    temp->next = NULL;
+    temp->next = newNode;
+    newNode->next = NULL;
+
+    return head;
 }
 
-// Function to traverse and display the elements of the list
-void traverseAndDisplay(struct Node *head)
+// Function to traverse and print all the elements of the list
+void traverseLinkedList(struct Node *head, int data)
+{
+    // start from the head of the linked list
+    struct Node *temp = head;
+
+    // Traverse the linked list until the end (NULL)
+    while (temp != NULL)
+    {
+        printf("%d ", temp->data);
+        temp = temp->next;
+    }
+    printf("\n");
+}
+
+// Function to search for a value in the linked list
+bool searchLinkedList(struct Node *head, int target)
+{
+    struct Node *temp = head;
+    // Traverse the Linked list
+    while (temp != NULL)
+    {
+        if (temp->data == target)
+        {
+            return true;
+        }
+        temp = temp->next;
+    }
+    return false;
+}
+
+// Function to delete at the begining of the linked list
+struct Node *deleteFromFirst(struct Node *head)
 {
     if (head == NULL)
     {
-        printf("The list is empty.\n");
-        return;
+        return NULL;
     }
+    // Move the head pointer to the next node
     struct Node *temp = head;
-    printf("Elements of the linked list: ");
-    while (temp != NULL)
-    {
-        printf("%d -> ", temp->data);
-        temp = temp->next;
-    }
-    printf("NULL\n");
+    head = temp->next;
+
+    free(temp);
+
+    return head;
 }
 
-// Function to search for a specific value in the list
-int Search(struct Node *head, int data)
+struct Node *deleteFromLast(struct Node *head)
 {
-    struct Node *temp = head;
-    while (temp != NULL)
+    if (head == NULL)
     {
-        if (temp->data == data)
-        {
-            return 1; // Element found
-        }
-        temp = temp->next;
+        return NULL;
     }
-    return 0; // Element not found
-}
 
+    else if (head->next == NULL)
+    {
+        free(head);
+        return NULL;
+    }
+    struct Node *secondLast = head;
+    while (secondLast->next->next != NULL)
+    {
+        secondLast = secondLast->next;
+    }
+    free(secondLast->next);
+    secondLast->next = NULL;
+
+    return head;
+}
 int main()
 {
-    struct Node *head = NULL; // Initializing head pointer
-    int choice, data;
+    struct Node *head = NULL;
+    head = insertAtBeginning(head, 10);
+    head = insertAtBeginning(head, 20);
+    head = insertAtBeginning(head, 30);
+    head = insertAtBeginning(head, 40);
+    head = insertAtBeginning(head, 50);
+    head = insertAtEnd(head, 60);
+    head = insertAtEnd(head, 70);
+    head = insertAtEnd(head, 80);
+    head = insertAtEnd(head, 90);
+    head = insertAtEnd(head, 100);
+    printf("Original Linked List: ");
+    traverseLinkedList(head, 10);
 
-    do
-    {
-        printf("\n1. Insert at beginning\n2. Delete from last\n3. Traverse and Display\n4. Search\n5. Exit\n");
-        printf("Enter your choice: ");
-        scanf("%d", &choice);
+    printf("Search 60: %s\n", searchLinkedList(head, 60) ? "Found" : "Not Found");
+    printf("Search 110: %s\n", searchLinkedList(head, 110) ? "Found" : "Not Found");
 
-        switch (choice)
-        {
-        case 1:
-            printf("Enter the value to insert: ");
-            scanf("%d", &data);
-            Insert(&head, data);
-            break;
-
-        case 2:
-            deleteFromEnd(&head);
-            break;
-
-        case 3:
-            traverseAndDisplay(head);
-            break;
-
-        case 4:
-            printf("Enter the value to search: ");
-            scanf("%d", &data);
-            if (Search(head, data))
-            {
-                printf("Element %d found in the list.\n", data);
-            }
-            else
-            {
-                printf("Element %d not found in the list.\n", data);
-            }
-            break;
-
-        case 5:
-            printf("Exiting Program.\n");
-            break;
-
-        default:
-            printf("Invalid Choice. Please try again.\n");
-            break;
-        }
-    } while (choice != 5);
-
+    printf("After deleting from the first: ");
+    head = deleteFromFirst(head);
+    traverseLinkedList(head, 10);
+    printf("After deleting from the last: ");
+    head = deleteFromLast(head);
+    traverseLinkedList(head, 10);
     return 0;
 }

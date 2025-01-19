@@ -16,6 +16,7 @@ int genetateSubset(int array[], int n, int subset[], int subsetSize, int index)
 {
     printSubset(subset, subsetSize);
 
+    // after this condition is met, the backtracking starts i.e. after index = 3
     for (int i = index; i < n; i++)
     {
         subset[subsetSize] = array[i];
