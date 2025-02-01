@@ -1,99 +1,106 @@
 #include <stdio.h>
-// #include <conio.h>
+#include <stdlib.h>
 
-#define MAXSIZE 10
+#define MAX_SIZE 5
 
-int queue[MAXSIZE];
-int rear = -1, front = -1;
+typedef struct LinearQueue
+{
+    int items[MAX_SIZE];
+    int front;
+    int rear;
+    int size;
 
-void Insert();
-void Delete();
-void Display();
+} LinearQueue;
+
+void initialize(LinearQueue *queue)
+{
+    queue->front = -1;
+    queue->rear = -1;
+}
+
+// check if the queue is empty
+int isEmpty(LinearQueue *queue)
+{
+    return queue->front == -1;
+}
+
+// check if queue is full
+int isFull(LinearQueue *queue)
+{
+    return queue->rear == MAX_SIZE - 1;
+}
+
+// Add an element to the rear
+void enqueue(LinearQueue *queue, int value)
+{
+    if (isFull(queue))
+    {
+        printf("Queue Overflow! Cannot enque %d.\n", value);
+        return;
+    }
+    if (isEmpty(queue))
+    {
+        queue->front = 0; // initialzing the front when the first element is added
+    }
+    queue->rear++;
+    queue->items[queue->rear] = value;
+
+    printf("Enqueued %d\n", value);
+}
+
+int dequeue(LinearQueue *queue)
+{
+    if (isEmpty(queue))
+    {
+        printf("Queue is Empty, Nothing to dequeue!\n");
+        return -1;
+    }
+    int dequeValue = queue->items[queue->front];
+
+    if (queue->front == queue->rear)
+    {
+        queue->front = queue->rear = -1;
+    }
+    else
+    {
+        queue->front++;
+    }
+    return printf("Dequeued %d\n", dequeValue);
+}
+
+int display(LinearQueue *queue)
+{
+    if (isEmpty(queue))
+    {
+        printf("Queue is Empty, Nothing to dequeue!\n");
+        return -1;
+    }
+    printf("Queue: ");
+    for (int i = queue->front; i <= queue->rear; i++)
+    {
+        printf("%d ", queue->items[i]);
+    }
+    printf("\n");
+}
 
 int main()
 {
-    int choice;
-    do
-    {
-        printf("\n-----------------------Queue-----------------------");
-        printf("\n 1.Insert \n 2.Delete \n 3.Display \n 4.Exit\n");
-        printf("Enter your choice: ");
-        scanf("%d", &choice);
+    LinearQueue queue;
+    initialize(&queue);
 
-        switch (choice)
-        {
-        case 1:
-            Insert();
-            break;
-        case 2:
-            Delete();
-            break;
-        case 3:
-            Display();
-            break;
-        case 4:
-            printf("Exiting Program.\n");
+    enqueue(&queue, 10);
+    enqueue(&queue, 20);
+    enqueue(&queue, 30);
+    enqueue(&queue, 40);
+    enqueue(&queue, 50);
+    enqueue(&queue, 60);
 
-        default:
-            printf("Invalid Choice");
-            break;
-        }
-    } while (choice != 4);
+    display(&queue);
+
+    dequeue(&queue);
+    dequeue(&queue);
+
+    display(&queue);
 
     return 0;
-}
-
-void Insert()
-{
-    int n;
-    if (rear == (MAXSIZE - 1))
-    {
-        printf("Queue is full.\n");
-    }
-    else
-    {
-        printf("Enter the value to add: ");
-        scanf("%d", &n);
-        if (front == -1)
-            front = 0;
-        rear++;
-        queue[rear] = n;
-        printf("Inserted %d.\n", n);
-    }
-}
-
-void Delete()
-{
-    int n;
-    if (rear < front)
-    {
-        printf("Queue is empty.");
-    }
-    else
-    {
-        n = queue[front];
-        printf("Deleted element is %d", n);
-        front++;
-        if (rear < front)
-        {
-            rear = front = -1;
-        }
-    }
-}
-void Display()
-{
-    int i;
-    int n;
-    if (rear < front)
-    {
-        printf("Queue is empty.");
-    }
-    else
-    {
-        for (i = front; i <= rear; i++)
-        {
-            n = queue[i];
-            printf("\t %d", n);
-        }
-    }
 }
