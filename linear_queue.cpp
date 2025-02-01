@@ -48,14 +48,16 @@ void enqueue(LinearQueue *queue, int value)
     printf("Enqueued %d\n", value);
 }
 
-int dequeue(LinearQueue *queue)
+void dequeue(LinearQueue *queue)
 {
     if (isEmpty(queue))
     {
         printf("Queue is Empty, Nothing to dequeue!\n");
-        return -1;
+        return;
     }
+
     int dequeValue = queue->items[queue->front];
+    printf("Dequeued %d\n", dequeValue);
 
     if (queue->front == queue->rear)
     {
@@ -65,15 +67,13 @@ int dequeue(LinearQueue *queue)
     {
         queue->front++;
     }
-    return printf("Dequeued %d\n", dequeValue);
 }
 
-int display(LinearQueue *queue)
+void display(LinearQueue *queue)
 {
     if (isEmpty(queue))
     {
         printf("Queue is Empty, Nothing to dequeue!\n");
-        return -1;
     }
     printf("Queue: ");
     for (int i = queue->front; i <= queue->rear; i++)
