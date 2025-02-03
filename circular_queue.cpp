@@ -24,3 +24,30 @@ int isFull(circularQueue *queue)
 {
     return (queue->rear + 1) % MAX_SIZE == queue->front;
 }
+
+void Enqueue(circularQueue *queue, int value)
+{
+
+    if (isFull(queue))
+    {
+        printf("The queue is Full! Cannot enqueue!!");
+        return;
+    }
+
+    else
+    {
+        queue->rear = (queue->rear + 1) % MAX_SIZE;
+        queue->items[queue->rear] = value;
+    }
+}
+
+int Dequeue(circularQueue *queue)
+{
+    if (isEmpty(queue))
+    {
+        printf("The queue is Empty! Nothing to dequeue!!");
+        return -1;
+    }
+    if front
+        ->rear
+}
