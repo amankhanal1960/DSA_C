@@ -19,8 +19,8 @@ void towerOfHanoi(int n, char source, char destination, char auxiliary)
 
 int main()
 {
-    // int n = 3;  //number of disks
+    int n = 3; // number of disks
     // A is the source peg, C is the destination peg, B is the auxiliary peg.
-    towerOfHanoi(3, 'A', 'C', 'B');
+    towerOfHanoi(n, 'A', 'C', 'B');
     return 0;
 }
